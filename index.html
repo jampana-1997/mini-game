@@ -3,117 +3,160 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Guess The Number</title>
+<title>Snake Game</title>
 
 <style>
 body{
     margin:0;
-    font-family:Arial,sans-serif;
-    background:linear-gradient(135deg,#4facfe,#00f2fe);
     display:flex;
     justify-content:center;
     align-items:center;
     height:100vh;
-}
-
-.box{
-    background:#fff;
-    padding:30px;
-    border-radius:15px;
-    text-align:center;
-    width:320px;
-    box-shadow:0 10px 25px rgba(0,0,0,.2);
-}
-
-h2{
-    margin-top:0;
-}
-
-input{
-    width:80%;
-    padding:10px;
-    font-size:18px;
-    margin-top:10px;
-}
-
-button{
-    margin-top:15px;
-    padding:10px 20px;
-    font-size:18px;
-    border:none;
-    border-radius:8px;
-    background:#2196f3;
+    background:#111;
+    font-family:Arial;
     color:white;
-    cursor:pointer;
+    flex-direction:column;
 }
-
-button:hover{
-    background:#1976d2;
+h2{
+    margin-bottom:10px;
 }
-
-#result{
-    margin-top:20px;
-    font-size:20px;
-    font-weight:bold;
+canvas{
+    background:#222;
+    border:4px solid lime;
 }
-
 #score{
     margin-top:10px;
+    font-size:22px;
 }
 </style>
 </head>
+
 <body>
 
-<div class="box">
-<h2>🎯 Guess The Number</h2>
-<p>Guess a number between <b>1 - 10</b></p>
+<h2>🐍 Snake Game</h2>
 
-<input type="number" id="guess" min="1" max="10">
+<canvas id="game" width="400" height="400"></canvas>
 
-<br>
-
-<button onclick="check()">Guess</button>
-
-<p id="result"></p>
-<p id="score">Score : 10</p>
-
-</div>
+<div id="score">Score : 0</div>
 
 <script>
 
-let number=Math.floor(Math.random()*10)+1;
-let score=10;
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
 
-function check(){
+const box=20;
 
-let user=Number(document.getElementById("guess").value);
+let snake=[
+    {x:9*box,y:10*box}
+];
 
-if(user===number){
-document.getElementById("result").innerHTML="🎉 Correct!";
-document.getElementById("result").style.color="green";
+let food={
+    x:Math.floor(Math.random()*20)*box,
+    y:Math.floor(Math.random()*20)*box
+};
+
+let score=0;
+
+let direction="";
+
+document.addEventListener("keydown",move);
+
+function move(e){
+
+if(e.key=="ArrowLeft" && direction!="RIGHT")
+direction="LEFT";
+
+if(e.key=="ArrowUp" && direction!="DOWN")
+direction="UP";
+
+if(e.key=="ArrowRight" && direction!="LEFT")
+direction="RIGHT";
+
+if(e.key=="ArrowDown" && direction!="UP")
+direction="DOWN";
+
 }
-else{
 
-score--;
+function collision(head,array){
 
-if(score<=0){
-document.getElementById("result").innerHTML="💀 Game Over! Number was "+number;
-document.getElementById("score").innerHTML="Score : 0";
-return;
+for(let i=0;i<array.length;i++){
+if(head.x==array[i].x && head.y==array[i].y){
+return true;
+}
 }
 
-if(user<number){
-document.getElementById("result").innerHTML="📉 Too Low!";
-}
-else{
-document.getElementById("result").innerHTML="📈 Too High!";
+return false;
+
 }
 
+function draw(){
+
+ctx.fillStyle="#222";
+ctx.fillRect(0,0,400,400);
+
+ctx.fillStyle="red";
+ctx.fillRect(food.x,food.y,box,box);
+
+for(let i=0;i<snake.length;i++){
+
+ctx.fillStyle=i==0?"lime":"green";
+ctx.fillRect(snake[i].x,snake[i].y,box,box);
+
+ctx.strokeStyle="#111";
+ctx.strokeRect(snake[i].x,snake[i].y,box,box);
+
+}
+
+let snakeX=snake[0].x;
+let snakeY=snake[0].y;
+
+if(direction=="LEFT") snakeX-=box;
+if(direction=="UP") snakeY-=box;
+if(direction=="RIGHT") snakeX+=box;
+if(direction=="DOWN") snakeY+=box;
+
+if(snakeX==food.x && snakeY==food.y){
+
+score++;
 document.getElementById("score").innerHTML="Score : "+score;
 
-}
+food={
+x:Math.floor(Math.random()*20)*box,
+y:Math.floor(Math.random()*20)*box
+};
+
+}else{
+
+snake.pop();
 
 }
+
+let newHead={
+x:snakeX,
+y:snakeY
+};
+
+if(
+snakeX<0||
+snakeY<0||
+snakeX>=400||
+snakeY>=400||
+collision(newHead,snake)
+){
+
+clearInterval(game);
+
+alert("Game Over!\nScore : "+score);
+
+location.reload();
+
+}
+
+snake.unshift(newHead);
+
+}
+
+let game=setInterval(draw,120);
 
 </script>
 
