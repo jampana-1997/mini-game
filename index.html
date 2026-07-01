@@ -144,12 +144,14 @@ do{
 
 }
 
+flet gameSpeed = 220;
+
 function restart(){
 
 snake=[
-
-{x:10,y:10}
-
+    {x:10,y:10},
+    {x:9,y:10},
+    {x:8,y:10}
 ];
 
 dx=1;
@@ -157,16 +159,15 @@ dy=0;
 
 score=0;
 
-document.getElementById("score").innerText=0;
+document.getElementById("score").innerText=score;
 
 placeItems();
 
 clearInterval(timer);
 
-timer=setInterval(update,180);
+timer = setInterval(update, gameSpeed);
 
 }
-
 document.addEventListener("keydown",e=>{
 
 if(e.key=="ArrowUp" && dy!=1){
@@ -254,7 +255,15 @@ if(head.x==food.x && head.y==food.y){
 score++;
 
 document.getElementById("score").innerText=score;
+if(score % 5 === 0){
 
+    gameSpeed = Math.max(80, gameSpeed - 10);
+
+    clearInterval(timer);
+
+    timer = setInterval(update, gameSpeed);
+
+}
 if(score>high){
 
 high=score;
