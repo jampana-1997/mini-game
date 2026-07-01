@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Full Card Game</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #111;
+      color: white;
+      text-align: center;
+    }
+
+    h2 {
+      margin-top: 20px;
+    }
+
+    .card {
+      width: 90vw;
+      height: 60vh;
+      margin: 20px auto;
+      background: white;
+      color: black;
+      font-size: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.4);
+    }
+
+    .buttons {
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 15px 25px;
+      margin: 10px;
+      font-size: 20px;
+      border-radius: 10px;
+    }
+
+    #result {
+      font-size: 28px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>🃏 Card Guess Game</h2>
+
+<div class="card" id="card">5</div>
+
+<div class="buttons">
+  <button onclick="newCard()">New Card</button>
+  <button onclick="guess('inside')">Inside</button>
+  <button onclick="guess('outside')">Outside</button>
+</div>
+
+<h3 id="result"></h3>
+
+<script>
+let number = 5;
+
+function newCard() {
+  number = Math.floor(Math.random() * 10) + 1;
+  document.getElementById("card").innerText = number;
+  document.getElementById("result").innerText = "";
+}
+
+function guess(type) {
+  if (number <= 5 && type === "inside") {
+    document.getElementById("result").innerText = "🎉 Correct!";
+  } else if (number > 5 && type === "outside") {
+    document.getElementById("result").innerText = "🎉 Correct!";
+  } else {
+    document.getElementById("result").innerText = "❌ Wrong!";
+  }
+}
+</script>
+
+</body>
+</html>
