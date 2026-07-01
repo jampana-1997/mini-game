@@ -144,9 +144,11 @@ do{
 
 }
 
-flet gameSpeed = 220;
+let gameSpeed = 220;
 
 function restart(){
+
+gameSpeed = 220;
 
 snake=[
     {x:10,y:10},
@@ -165,8 +167,9 @@ placeItems();
 
 clearInterval(timer);
 
-timer = setInterval(update, gameSpeed);
+timer=setInterval(update,gameSpeed);
 
+}
 }
 document.addEventListener("keydown",e=>{
 
