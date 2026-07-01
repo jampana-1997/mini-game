@@ -164,12 +164,11 @@ score=0;
 document.getElementById("score").innerText=score;
 
 placeItems();
-
+draw();
 clearInterval(timer);
 
 timer=setInterval(update,gameSpeed);
 
-}
 }
 document.addEventListener("keydown",e=>{
 
